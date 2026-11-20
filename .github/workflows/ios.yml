@@ -1,0 +1,34 @@
+
+name: Build iOS App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Find project
+        run: |
+          find . -name "*.xcodeproj" -o -name "*.xcworkspace"
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project 3106.xcodeproj \
+            -scheme 3106 \
+            -sdk iphonesimulator \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            build
